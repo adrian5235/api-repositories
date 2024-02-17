@@ -7,20 +7,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class RepositoryMapper {
+public class RepositoryMapper implements Mapper<Repository, RepositoryDTO> {
 
     private final BranchMapper mapper;
 
-    public RepositoryDTO toDto(Repository repository) {
+    @Override
+    public RepositoryDTO toDTO(Repository repository) {
+        if (repository == null) {
+            throw new NullPointerException("The repository is null");
+        }
         String name = repository.getName();
         String owner = repository.getOwner().getLogin();
         List<BranchDTO> branches = repository.getBranches()
                 .stream()
                 .map(mapper::toDTO)
-                .toList();
+                .collect(Collectors.toList());
 
         return new RepositoryDTO(name, owner, branches);
     }

@@ -5,9 +5,13 @@ import com.adrian.api.model.Branch;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BranchMapper {
+public class BranchMapper implements Mapper <Branch, BranchDTO> {
 
+    @Override
     public BranchDTO toDTO(Branch branch) {
+        if (branch == null) {
+            throw new NullPointerException("The branch is null");
+        }
         String name = branch.getName();
         String lastCommitSha = branch.getCommit().getSha();
 
