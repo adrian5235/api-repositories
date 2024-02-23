@@ -21,7 +21,7 @@ public class RepositoryMapper implements Mapper<Repository, RepositoryDTO> {
             throw new NullPointerException("The repository is null");
         }
         String name = repository.getName();
-        String owner = repository.getOwner().getLogin();
+        String owner = repository.getOwner().login();
         List<BranchDTO> branches = repository.getBranches()
                 .stream()
                 .map(mapper::toDTO)

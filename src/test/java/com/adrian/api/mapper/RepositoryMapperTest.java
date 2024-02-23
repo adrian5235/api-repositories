@@ -38,7 +38,7 @@ class RepositoryMapperTest {
         List<BranchDTO> branchDTOS = repositoryDTO.branches();
 
         assertEquals(repository.getName(), repositoryDTO.name());
-        assertEquals(repository.getOwner().getLogin(), repositoryDTO.owner());
+        assertEquals(repository.getOwner().login(), repositoryDTO.owner());
 
         for (BranchDTO branchDTO : branchDTOS) {
             assertInstanceOf(branchDTO.getClass(), branchDTO);
@@ -47,8 +47,7 @@ class RepositoryMapperTest {
 
     @Test
     public void should_throw_exception_when_repository_is_null() {
-        var exception = assertThrows(NullPointerException.class,
-                () -> mapper.toDTO(null));
+        var exception = assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
         assertEquals("The repository is null", exception.getMessage());
     }
 }

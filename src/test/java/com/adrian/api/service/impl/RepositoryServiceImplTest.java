@@ -1,7 +1,7 @@
 package com.adrian.api.service.impl;
 
 import com.adrian.api.dto.RepositoryDTO;
-import com.adrian.api.exception.UserDoesNotExistException;
+import com.adrian.api.exception.UserNotFoundException;
 import com.adrian.api.mapper.RepositoryMapper;
 import com.adrian.api.model.Branch;
 import com.adrian.api.model.Commit;
@@ -15,12 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -41,9 +39,7 @@ class RepositoryServiceImplTest {
     }
 
     @Test
-    public void should_return_all_user_repositories_which_are_not_forks()
-            throws IOException, UserDoesNotExistException {
-
+    public void should_return_all_user_repositories_which_are_not_forks() throws UserNotFoundException {
         // Given
         List<Repository> repositories = Arrays.asList(
                 // first one, not a fork
@@ -80,12 +76,4 @@ class RepositoryServiceImplTest {
         assertEquals(repositories.size() - 1, repositoryDTOS.size());
         verify(repositoryRepository, times(1)).getRepositories(anyString());
     }
-
-    @Test
-    public void should_throw_user_does_not_exist_exception_when_github_user_of_given_username_does_not_exist() {
-        assertThrows(UserDoesNotExistException.class, () -> service.getByUsername("adrian52353"));
-    }
-
-    // TODO create a github account without any repositories or with only fork/forks and write a test
-    //  checking if exception of class NullPointerException with proper message is being thrown
 }

@@ -12,8 +12,8 @@ public class BranchMapper implements Mapper <Branch, BranchDTO> {
         if (branch == null) {
             throw new NullPointerException("The branch is null");
         }
-        String name = branch.getName();
-        String lastCommitSha = branch.getCommit().getSha();
+        String name = branch.name();
+        String lastCommitSha = branch.commit().sha();
 
         return new BranchDTO(name, lastCommitSha);
     }

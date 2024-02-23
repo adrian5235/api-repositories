@@ -27,8 +27,8 @@ class BranchMapperTest {
 
         BranchDTO branchDTO = mapper.toDTO(branch);
 
-        assertEquals(branch.getName(), branchDTO.name());
-        assertEquals(branch.getCommit().getSha(), branchDTO.lastCommitSha());
+        assertEquals(branch.name(), branchDTO.name());
+        assertEquals(branch.commit().sha(), branchDTO.lastCommitSha());
     }
 
     @Test

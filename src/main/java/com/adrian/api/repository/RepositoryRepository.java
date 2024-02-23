@@ -1,24 +1,30 @@
 package com.adrian.api.repository;
 
+import com.adrian.api.exception.UserNotFoundException;
 import com.adrian.api.model.Repository;
-import com.google.gson.Gson;
-import org.jsoup.Jsoup;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClient;
 
-import java.io.IOException;
 import java.util.List;
 
-// this is repository class containing method to fetch all the user GitHub repositories
 @org.springframework.stereotype.Repository
 public class RepositoryRepository {
 
-    public List<Repository> getRepositories(String username) throws IOException {
-        String url = "https://api.github.com";
-        Gson gson = new Gson();
+    RestClient restClient = RestClient.builder().baseUrl("https://api.github.com/").build();
 
-        String json = Jsoup.connect(url + "/users/" + username + "/repos")
-                .ignoreContentType(true).execute().body();
-        Repository[] repos = gson.fromJson(json, Repository[].class);
+    public List<Repository> getRepositories(String username) throws UserNotFoundException {
+        List<Repository> repositories;
 
-        return List.of(repos);
+        try {
+            repositories = restClient.get()
+                    .uri("/users/" + username + "/repos")
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<>() {});
+        } catch (HttpClientErrorException e) {
+            throw new UserNotFoundException();
+        }
+
+        return repositories;
     }
 }
